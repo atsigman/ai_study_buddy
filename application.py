@@ -109,7 +109,7 @@ def main() -> None:
                 with open(output_filepath, "rb") as f:
                     st.download_button(
                         label="Download Results",
-                        data=output_filepath,
+                        data=f.read(),
                         file_name=os.path.basename(output_filepath),
                         mime="text/csv"
                     )
