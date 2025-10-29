@@ -16,7 +16,9 @@ class MCQuestion(BaseModel):
 
 class FillBlankQuestion(BaseModel):
     question: str = Field(description="The question text with '___' for the blank")
-    correct_answer: str = Field(description="The correct word or phrase filling in the blank")
+    correct_answer: str = Field(
+        description="The correct word or phrase filling in the blank"
+    )
 
     @validator("question", pre=True)
     def clean_question(cls, v):

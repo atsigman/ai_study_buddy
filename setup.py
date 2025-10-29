@@ -8,5 +8,5 @@ setup(
     name="study_buddy_app",
     author="atsigman",
     packages=find_packages(),
-    install_requires=requirements
+    install_requires=requirements,
 )

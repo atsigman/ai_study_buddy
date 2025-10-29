@@ -33,27 +33,17 @@ def main() -> None:
     st.sidebar.header("Quiz Settings")
 
     question_type = st.sidebar.selectbox(
-        "Question Type",
-        ["Multiple Choice", "Fill in the Blank"],
-        index=0
+        "Question Type", ["Multiple Choice", "Fill in the Blank"], index=0
     )
 
-    topic = st.sidebar.text_input(
-        "Enter Topic",
-        placeholder = "AI History, Technology"
-    )
+    topic = st.sidebar.text_input("Enter Topic", placeholder="AI History, Technology")
 
     difficulty = st.sidebar.selectbox(
-        "Difficulty Level",
-        ["Easy", "Medium", "Hard"],
-        index=1
+        "Difficulty Level", ["Easy", "Medium", "Hard"], index=1
     )
 
     n_questions = st.sidebar.number_input(
-        "Number of Questions",
-        min_value=1,
-        max_value=10,
-        value=5
+        "Number of Questions", min_value=1, max_value=10, value=5
     )
 
     # Generate quiz:
@@ -85,7 +75,7 @@ def main() -> None:
 
         if not results_df.empty:
             correct_count = results_df["is_correct"].sum()
-            score_perc =  (correct_count / len(results_df)) * 100
+            score_perc = (correct_count / len(results_df)) * 100
             st.write(f"Score: {score_perc}%")
 
         # Iterate through questions, print evaluation for each:
@@ -111,7 +101,7 @@ def main() -> None:
                         label="Download Results",
                         data=f.read(),
                         file_name=os.path.basename(output_filepath),
-                        mime="text/csv"
+                        mime="text/csv",
                     )
 
             else:

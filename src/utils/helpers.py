@@ -2,6 +2,7 @@
 Quiz management-related utility methods.
 Called in the main (application) module.
 """
+
 import pandas as pd
 import streamlit as st
 
@@ -24,8 +25,14 @@ class QuizManager:
         self.user_answers = []
         self.results = []
 
-    def generate_questions(self, generator: QuestionGenerator, topic: str,
-                           question_type: Literal["Multiple Choice", "Fill in the Blank"], difficulty: str, n_questions: int) -> bool:
+    def generate_questions(
+        self,
+        generator: QuestionGenerator,
+        topic: str,
+        question_type: Literal["Multiple Choice", "Fill in the Blank"],
+        difficulty: str,
+        n_questions: int,
+    ) -> bool:
         """
         Generate and cache all questions.
         """
@@ -44,16 +51,18 @@ class QuizManager:
                             "type": "MCQ",
                             "question": question.question,
                             "options": question.options,
-                            "correct_answer": question.correct_answer
+                            "correct_answer": question.correct_answer,
                         }
                     )
                 else:
-                    question = generator.generate_fill_blank_question(topic, difficulty.lower())
+                    question = generator.generate_fill_blank_question(
+                        topic, difficulty.lower()
+                    )
                     self.questions.append(
                         {
                             "type": "Fill in the blank",
                             "question": question.question,
-                            "correct_answer": question.correct_answer
+                            "correct_answer": question.correct_answer,
                         }
                     )
         except Exception as e:
@@ -79,19 +88,22 @@ class QuizManager:
                 user_answer = st.radio(
                     f"Select an answer for Question {i + 1}",
                     q["options"],
-                    key=f"mcq_{i}"
+                    key=f"mcq_{i}",
                 )
 
             else:
                 user_answer = st.text_input(
-                f"Fill in the blank for Question {i + 1}",
-                key=f"fill_blank_{i}"
+                    f"Fill in the blank for Question {i + 1}", key=f"fill_blank_{i}"
                 )
 
             if user_answer:
                 st.session_state.answers[i] = user_answer
 
-        self.user_answers = [st.session_state.answers[i] for i in range(len(self.questions)) if i in st.session_state.answers]
+        self.user_answers = [
+            st.session_state.answers[i]
+            for i in range(len(self.questions))
+            if i in st.session_state.answers
+        ]
 
     def evaluate_quiz(self) -> None:
         """
@@ -107,7 +119,7 @@ class QuizManager:
                 "question_type": q["type"],
                 "user_answer": user_answer,
                 "correct_answer": q["correct_answer"],
-                "is_correct": False
+                "is_correct": False,
             }
 
             if q["type"] == "MCQ":
@@ -143,12 +155,13 @@ class QuizManager:
 
         # format output path:
         from datetime import datetime
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_filename = f"{filename_prefix}_{timestamp}.csv"
 
         output_dir = "results"
         Path(output_dir).mkdir(exist_ok=True, parents=True)
-        output_path = str(Path(output_dir, output_filename)) 
+        output_path = str(Path(output_dir, output_filename))
 
         try:
             df.to_csv(output_path, index=False)

@@ -13,14 +13,20 @@ class QuestionGenerator:
         self.llm = get_groq_llm()
         self.logger = get_logger(self.__class__.__name__)
 
-    def _retry_and_parse(self, prompt: str, parser: PydanticOutputParser, topic: str, difficulty: str):
+    def _retry_and_parse(
+        self, prompt: str, parser: PydanticOutputParser, topic: str, difficulty: str
+    ):
         """
         Attempt to parse the returned question.
         """
         for attempt in range(settings.MAX_RETRIES):
             try:
-                self.logger.info(f"Generating question for topic {topic} with difficulty {difficulty}...")
-                response = self.llm.invoke(prompt.format(topic=topic, difficulty=difficulty))
+                self.logger.info(
+                    f"Generating question for topic {topic} with difficulty {difficulty}..."
+                )
+                response = self.llm.invoke(
+                    prompt.format(topic=topic, difficulty=difficulty)
+                )
                 parsed = parser.parse(response.content)
                 self.logger.info("Successfully parsed the question")
                 return parsed
@@ -28,14 +34,21 @@ class QuestionGenerator:
             except Exception as e:
                 self.logger.error(f"Error: {str(e)}")
                 if attempt == settings.MAX_RETRIES - 1:
-                    raise CustomException(f"Generation failed after {attempt + 1} retries", e)
+                    raise CustomException(
+                        f"Generation failed after {attempt + 1} retries", e
+                    )
 
     def generate_mcq(self, topic: str, difficulty: str = "medium") -> MCQuestion:
         try:
             parser = PydanticOutputParser(pydantic_object=MCQuestion)
-            question = self._retry_and_parse(mcq_prompt_template, parser, topic, difficulty)
+            question = self._retry_and_parse(
+                mcq_prompt_template, parser, topic, difficulty
+            )
 
-            if len(question.options) != 4 and question.correct_answer not in question.options:
+            if (
+                len(question.options) != 4
+                and question.correct_answer not in question.options
+            ):
                 raise ValueError("Invalid MCQ structure")
 
             self.logger.info("Generated a valid MCQ")
@@ -45,10 +58,14 @@ class QuestionGenerator:
             self.logger.error(f"Failed to generate MCQ: {str(e)}")
             raise CustomException("MCQ generation failed", e)
 
-    def generate_fill_blank_question(self, topic: str, difficulty: str = "medium") -> FillBlankQuestion:
+    def generate_fill_blank_question(
+        self, topic: str, difficulty: str = "medium"
+    ) -> FillBlankQuestion:
         try:
             parser = PydanticOutputParser(pydantic_object=FillBlankQuestion)
-            question = self._retry_and_parse(fill_blank_prompt_template, parser, topic, difficulty)
+            question = self._retry_and_parse(
+                fill_blank_prompt_template, parser, topic, difficulty
+            )
 
             if "__" not in question.question:
                 raise ValueError("Fill in blanks should contain '__'")
