@@ -10,6 +10,7 @@ pipeline {
             steps {
                 echo 'Checking out code from GitHub...'
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github_token', url: 'https://github.com/atsigman/ai_study_buddy.git']])
+            }
         }
         // stage('Build Docker Image') {
         //     steps {
