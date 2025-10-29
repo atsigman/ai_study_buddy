@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_HUB_REPO = "atsigman/study_buddy"
         DOCKER_HUB_CREDENTIALS_ID = "docker_hub_token"
-        IMAGE_TAG = "v${BUILD_NUMBER}"
+        IMAGE_TAG = "latest"
     }
     stages {
         stage('Checkout Github') {
