@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: studybuddy-app
-        image: atsigman/studybuddy:v17
+        image: atsigman/study_buddy:v17
         ports:
         - containerPort: 8501
         env:
