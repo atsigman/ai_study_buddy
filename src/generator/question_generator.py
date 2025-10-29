@@ -1,3 +1,4 @@
+from typing import List
 from langchain_core.output_parsers.pydantic import PydanticOutputParser
 
 from src.models.question_schemas import MCQuestion, FillBlankQuestion
@@ -14,7 +15,8 @@ class QuestionGenerator:
         self.logger = get_logger(self.__class__.__name__)
 
     def _retry_and_parse(
-        self, prompt: str, parser: PydanticOutputParser, topic: str, difficulty: str
+        self, prompt: str, parser: PydanticOutputParser, topic: str, difficulty: str,
+        questions: List[str] = None
     ):
         """
         Attempt to parse the returned question.
@@ -25,7 +27,7 @@ class QuestionGenerator:
                     f"Generating question for topic {topic} with difficulty {difficulty}..."
                 )
                 response = self.llm.invoke(
-                    prompt.format(topic=topic, difficulty=difficulty)
+                    prompt.format(topic=topic, difficulty=difficulty, questions=questions)
                 )
                 parsed = parser.parse(response.content)
                 self.logger.info("Successfully parsed the question")
@@ -38,11 +40,11 @@ class QuestionGenerator:
                         f"Generation failed after {attempt + 1} retries", e
                     )
 
-    def generate_mcq(self, topic: str, difficulty: str = "medium") -> MCQuestion:
+    def generate_mcq(self, topic: str, difficulty: str = "medium", questions: List[str] = None) -> MCQuestion:
         try:
             parser = PydanticOutputParser(pydantic_object=MCQuestion)
             question = self._retry_and_parse(
-                mcq_prompt_template, parser, topic, difficulty
+                mcq_prompt_template, parser, topic, difficulty, questions
             )
 
             if (
@@ -59,12 +61,12 @@ class QuestionGenerator:
             raise CustomException("MCQ generation failed", e)
 
     def generate_fill_blank_question(
-        self, topic: str, difficulty: str = "medium"
+        self, topic: str, difficulty: str = "medium", questions: List[str] = None
     ) -> FillBlankQuestion:
         try:
             parser = PydanticOutputParser(pydantic_object=FillBlankQuestion)
             question = self._retry_and_parse(
-                fill_blank_prompt_template, parser, topic, difficulty
+                fill_blank_prompt_template, parser, topic, difficulty, questions
             )
 
             if "__" not in question.question:

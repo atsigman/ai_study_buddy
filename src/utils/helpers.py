@@ -45,7 +45,9 @@ class QuizManager:
         try:
             for _ in range(n_questions):
                 if question_type == "Multiple Choice":
-                    question = generator.generate_mcq(topic, difficulty.lower())
+
+                    question = generator.generate_mcq(topic, difficulty.lower(), self.questions)
+
                     self.questions.append(
                         {
                             "type": "MCQ",
@@ -56,8 +58,9 @@ class QuizManager:
                     )
                 else:
                     question = generator.generate_fill_blank_question(
-                        topic, difficulty.lower()
+                        topic, difficulty.lower(), self.questions
                     )
+
                     self.questions.append(
                         {
                             "type": "Fill in the blank",

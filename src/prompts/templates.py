@@ -4,6 +4,7 @@ from langchain_core.prompts import PromptTemplate
 mcq_prompt_template = PromptTemplate(
     template=(
         "Generate a {difficulty} multiple-choice question about {topic}.\n\n"
+        "Make sure that the question is not similar to any questions in the 'question' field of this list of entries: {questions}.\n\n"
         "Return ONLY a JSON object with these exact fields:\n"
         "- 'question': A clear, specific question\n"
         "- 'options': An array of exactly 4 possible answers\n"
@@ -22,6 +23,7 @@ mcq_prompt_template = PromptTemplate(
 fill_blank_prompt_template = PromptTemplate(
     template=(
         "Generate a {difficulty} fill-in-the-blank question about {topic}.\n\n"
+        "Make sure that the question is not similar to any questions in the 'question' field of this list of entries: {questions}.\n\n"
         "Limit correct answers to 1 or 2 words.\n\n"
         "Return ONLY a JSON object with these exact fields:\n"
         "- 'question': A sentence with '_____' marking where the blank should be\n"
