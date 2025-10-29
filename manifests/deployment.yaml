@@ -15,6 +15,7 @@ spec:
       containers:
       - name: studybuddy-app
         image: atsigman/study_buddy:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8501
         env:
