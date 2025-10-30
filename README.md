@@ -24,7 +24,7 @@ To run a container/the app: `docker run -d -p 8501:8501 --name study-buddy-conta
 
 ## Groq API Key:
 It will be necessary to create a Groq  API key. It should be stored in a `.env` file in the project
-root directory. An `env_dummy.txt' file is provided for reference. <br />
+root directory. An `env_dummy.txt` file is provided for reference. <br />
 Groq: https://console.groq.com/keys
 
 ## Running the App:
