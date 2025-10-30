@@ -8,7 +8,7 @@ and a difficulty level of the user's choosing.<br />
 Once submitted, the quiz is evaluated, with correct responses displayed. Results may be downloaded in CSV format.
 
 <p align="center">
-  <img src="assets/quiz_generation.png" width="45%" alt="Quiz generation">
+  <img src="assets/quiz_generation.png" width="50%" alt="Quiz generation">
   <img src="assets/quiz_results.png" width="45%" alt="Quiz evaluation">
 </p>
 
